@@ -24,5 +24,10 @@ public class UserController {
         return "hello";
     }
 
+    @RequestMapping("/admin/user")
+    public String getUserPage() {
+        return "admin/user/create";
+    }
+
 }
 
