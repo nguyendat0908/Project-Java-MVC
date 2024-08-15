@@ -1,0 +1,6 @@
+Tổng kết về mô hình MVC
+
+- Các thành phần:
+MODEL: code tại folder domain -> quản lý đối tượng, tác nhân tác động vào hệ thống (tables lưu trong DB)
+VIEW: là các file html, jsp,... tạo giao diện cho người dùng thấy
+CONTROLLER: Điều hướng hoạt động
