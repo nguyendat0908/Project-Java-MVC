@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
 @Controller
 public class UserController {
 
@@ -38,14 +37,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public User createUserPage(Model model, @ModelAttribute("newUser") User hoidanit) {
-        return this.userService.handleSaveUser(hoidanit);
+    public String createUserPage(Model model, @ModelAttribute("newUser") User hoidanit) {
+        this.userService.handleSaveUser(hoidanit);
+        return "redirect:/admin/user";
     }
 
     @RequestMapping("/admin/user")
     public String getUserPage(Model model) {
+        List<User> users = this.userService.getAllUsers();
+        model.addAttribute("users", users);
         return "admin/user/tableUser";
     }
-    
 
 }
