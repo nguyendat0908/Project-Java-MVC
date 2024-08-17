@@ -13,11 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @Controller
 public class UserController {
@@ -74,7 +70,7 @@ public class UserController {
         model.addAttribute("newUser", currentUser);
         return "admin/user/update";
     }
-    
+
     // Update User
     @PostMapping("/admin/user/update")
     public String postUpdateUser(Model model, @ModelAttribute("newUser") User user) {
@@ -100,5 +96,5 @@ public class UserController {
         this.userService.deleteUser(user.getId());
         return "redirect:/admin/user";
     }
-    
+
 }
