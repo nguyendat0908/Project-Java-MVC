@@ -1,15 +1,18 @@
 package vn.hoidanit.laptopshop.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
 public class Product {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -19,10 +22,14 @@ public class Product {
     private String image;
     private String detailDesc;
     private String shortDesc;
-    private long quatity;
+    private long quantity;
     private long sold;
     private String factory;
     private String target;
+
+    // Product one -> to many -> OrderDetails
+    // @OneToMany(mappedBy = "product")
+    // private List<OrderDetail> orderDetails;
 
     public long getId() {
         return id;
@@ -72,12 +79,12 @@ public class Product {
         this.shortDesc = shortDesc;
     }
 
-    public long getQuatity() {
-        return quatity;
+    public long getQuantity() {
+        return quantity;
     }
 
-    public void setQuatity(long quatity) {
-        this.quatity = quatity;
+    public void setQuantity(long quatity) {
+        this.quantity = quatity;
     }
 
     public long getSold() {
@@ -99,7 +106,7 @@ public class Product {
     public String getTarget() {
         return target;
     }
-    
+
     public void setTarget(String target) {
         this.target = target;
     }
@@ -107,7 +114,7 @@ public class Product {
     @Override
     public String toString() {
         return "Product [id=" + id + ", name=" + name + ", price=" + price + ", image=" + image + ", detailDesc="
-                + detailDesc + ", shortDesc=" + shortDesc + ", quatity=" + quatity + ", sold=" + sold + ", factory="
+                + detailDesc + ", shortDesc=" + shortDesc + ", quantity=" + quantity + ", sold=" + sold + ", factory="
                 + factory + ", target=" + target + "]";
     }
 
