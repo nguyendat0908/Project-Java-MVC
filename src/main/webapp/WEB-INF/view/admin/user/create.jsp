@@ -13,6 +13,18 @@
     <meta name="author" content="Hỏi Dân IT" />
     <title>Create - DatLeo</title>
     <link href="/css/styles.css" rel="stylesheet" />
+    <script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            const avatarFile = $("#avatarFile");
+            avatarFile.change(function (e) {
+                const imgURL = URL.createObjectURL(e.target.files[0]);
+                $("#avatarPreview").attr("src", imgURL);
+                $("#avatarPreview").css({ "display": "block" });
+            });
+        });
+    </script>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
@@ -39,38 +51,61 @@
                             <div class="col-12 mx-auto">
                                 <h4>Create a User</h4>
                                 <hr />
-                                <form:form method="post" action="/admin/user/create" modelAttribute="newUser">
-                
-                                    <div class="mb-3">
-                                      <label class="form-label">Email</label>
-                                      <form:input type="email" class="form-control" path="email"/>
-                                    </div>
-                            
-                                    <div class="mb-3">
-                                      <label class="form-label">Password</label>
-                                      <form:input type="password" class="form-control" path="password"/>
-                                    </div>
-                            
-                                    <div class="mb-3">
-                                        <label class="form-label">Phone Number</label>
-                                        <form:input type="tel" class="form-control" path="phone"/>
-                                    </div>
-                            
-                                    <div class="mb-3">
-                                        <label class="form-label">Full Name</label>
-                                        <form:input type="text" class="form-control" path="fullName"/>
-                                    </div>
-                            
-                                    <div class="mb-3">
-                                        <label class="form-label">Address</label>
-                                        <form:input type="text" class="form-control" path="address"/>
-                                    </div>
-                            
-                                    <button type="submit" class="btn btn-primary">Create</button>
-                                </form:form>
                             </div>
+                                <form:form method="post" action="/admin/user/create" modelAttribute="newUser" class="row" enctype="multipart/form-data">
+                                    <div class="col-12 col-md-6 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <form:input type="email" class="form-control" path="email"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Password</label>
+                                            <form:input type="password" class="form-control" path="password"/>
+                                        </div>      
+                                    </div>
+                                    <div class="col-12 col-md-6 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone Number</label>
+                                            <form:input type="tel" class="form-control" path="phone"/>
+                                        </div>      
+                                    </div>
+                                    <div class="col-12 col-md-6 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Full Name</label>
+                                            <form:input type="text" class="form-control" path="fullName"/>
+                                        </div>      
+                                    </div>
+                                    <div class="col-12 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Address</label>
+                                            <form:input type="text" class="form-control" path="address"/>
+                                        </div>      
+                                    </div>
+                                    <div class="col-12 col-md-6 mx-auto">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role</label>
+                                            <form:select class="form-select" path="role.name">
+                                                <form:option value="ADMIN">ADMIN</form:option>
+                                                <form:option value="USER">USER</form:option>
+                                            </form:select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 mx-auto">
+                                        <div class="mb-3">
+                                            <label for="avatarFile" class="form-label">Avatar</label>
+                                            <input class="form-control" type="file" id="avatarFile" accept=".png, .jpg, .jpeg" name="uploadFile"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <img style="max-height: 250px; display: none;" alt="Avatar preview" id="avatarPreview">
+                                    </div>
+                                    <div class="col-12 mb-5">
+                                        <button type="submit" class="btn btn-primary">Create</button>
+                                    </div>
+                            </form:form>
                         </div>
-                
                     </div>
                 </div>
             </main>
