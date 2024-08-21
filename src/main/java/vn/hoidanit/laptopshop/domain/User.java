@@ -23,15 +23,15 @@ public class User {
     private long id;
 
     @NotNull
-    @Email
+    @Email(message = "Email không đúng định dạng", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
 
     @NotNull
-    @Min(3)
+    @Size(min = 2, message = "Password phải có tối thiểu 2 ký tự")
     private String password;
 
     @NotNull
-    @Min(2)
+    @Size(min = 2, message = "Tên phải có tối thiểu 2 ký tự")
     private String fullName;
 
     private String address;
