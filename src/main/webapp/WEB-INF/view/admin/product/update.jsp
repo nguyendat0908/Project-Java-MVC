@@ -11,21 +11,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
     <meta name="author" content="Hỏi Dân IT" />
-    <title>Create - DatLeo</title>
+    <title>Update - DatLeo</title>
     <link href="/css/styles.css" rel="stylesheet" />
-    <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
         $(document).ready(() => {
             const imageFile = $("#imageFile");
-            imageFile.change(function (e) {
+            const orgImage = "${newProduct.image}";
+            if (orgImage) {
+                const urlImage = "/images/product/" + orgImage;
+                $("#imagePreview").attr("src", urlImage);
+                $("#imagePreview").css({"display":"block"})
+            }
+            imageFile.change(function(e){
                 const imgURL = URL.createObjectURL(e.target.files[0]);
                 $("#imagePreview").attr("src", imgURL);
-                $("#imagePreview").css({ "display": "block" });
-            });
-        });
+                $("#imagePreview").css({"display":"block"})
+            })
+        })
     </script>
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -41,19 +47,18 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Product</h1>
+                    <h1 class="mt-4">Products</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
-                        <li class="breadcrumb-item active">Create product</li>
+                        <li class="breadcrumb-item"><a href="/admin">Products</a></li>
+                        <li class="breadcrumb-item active">Update product</li>
                     </ol>
-                    <div class="container col-12 col-md-6 mt-5">
+                    <div class="container mt-5">
                         <div class="row">
                             <div class="col-12 mx-auto">
-                                <h4>Create a Product</h4>
+                                <h4>Update a User</h4>
                                 <hr />
-                            </div>
-                            <form:form method="post" action="/admin/product/create" modelAttribute="newProduct" class="row" enctype="multipart/form-data">
+                                <form:form method="post" action="/admin/product/update" modelAttribute="newProduct" class="row" enctype="multipart/form-data">
                                     <c:set var="errorName">
                                         <form:errors path="name" cssClass="invalid-feedback"/>
                                     </c:set>
@@ -69,6 +74,11 @@
                                     <c:set var="errorQuantity">
                                         <form:errors path="quantity" cssClass="invalid-feedback"/>
                                     </c:set>
+
+                                    <div class="mb-3" style="display: none;">
+                                        <label class="form-label">Id:</label>
+                                        <form:input type="text" class="form-control" path="id" />
+                                    </div>
 
                                     <div class="col-12 col-md-6 mx-auto">
                                         <div class="mb-3">
@@ -142,10 +152,12 @@
                                         <img style="max-height: 250px; display: none;" alt="Image preview" id="imagePreview">
                                     </div>
                                     <div class="col-12 mb-5">
-                                        <button type="submit" class="btn btn-primary">Create</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
                                     </div>
-                            </form:form>
+                                </form:form>
+                            </div>
                         </div>
+                
                     </div>
                 </div>
             </main>

@@ -29,10 +29,11 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Manager Users</h1>
+                    <h1 class="mt-4">Users</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item"><a href="/admin/user">User</a></li>
+                        <li class="breadcrumb-item active">Update user</li>
                     </ol>
                     <div class="container mt-5">
                         <div class="row">

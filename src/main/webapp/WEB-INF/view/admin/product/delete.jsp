@@ -29,23 +29,23 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Users</h1>
+                    <h1 class="mt-4">Products</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/user">User</a></li>
-                        <li class="breadcrumb-item active">Delete user</li>
+                        <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
+                        <li class="breadcrumb-item active">Delete product</li>
                     </ol>
                     <div class="container mt-5">
                         <div class="row">
                             <div class="col-12 mx-auto">
                                 <div class="d-flex justify-content-between">
-                                    <h4>Delete the user with ID = ${id}</h4>
+                                    <h4>Delete the product with ID = ${id}</h4>
                                 </div>
                                 <hr />
                                 <div class="alert alert-danger">
                                     Are you sure to delete this user ?
                                 </div>
-                                <form:form method="post" modelAttribute="newUser" action="/admin/user/delete">
+                                <form:form method="post" modelAttribute="newProduct" action="/admin/product/delete">
                                     <div class="mb-3" style="display: none;">
                                         <label class="form-label">Id</label>
                                         <form:input type="text" class="form-control" path="id" value="${id}"/>

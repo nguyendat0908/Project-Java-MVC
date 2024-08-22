@@ -13,8 +13,7 @@
     <meta name="author" content="Hỏi Dân IT" />
     <title>Create - DatLeo</title>
     <link href="/css/styles.css" rel="stylesheet" />
-    <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(() => {
             const avatarFile = $("#avatarFile");
@@ -41,10 +40,11 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Manager Users</h1>
+                    <h1 class="mt-4">Users</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item"><a href="/admin/user">User</a></li>
+                        <li class="breadcrumb-item active">Create user</li>
                     </ol>
                     <div class="container col-12 col-md-6 mt-5">
                         <div class="row">
@@ -53,11 +53,19 @@
                                 <hr />
                             </div>
                                 <form:form method="post" action="/admin/user/create" modelAttribute="newUser" class="row" enctype="multipart/form-data">
+
+                                    <c:set var="errorEmail">
+                                        <form:errors path="email" cssClass="invalid-feedback"/>
+                                    </c:set>
+                                    <c:set var="errorPassword">
+                                        <form:errors path="password" cssClass="invalid-feedback"/>
+                                    </c:set>
+                                    <c:set var="errorFullName">
+                                        <form:errors path="fullName" cssClass="invalid-feedback"/>
+                                    </c:set>
+
                                     <div class="col-12 col-md-6 mx-auto">
                                         <div class="mb-3">
-                                            <c:set var="errorEmail">
-                                                <form:errors path="email" cssClass="invalid-feedback"/>
-                                            </c:set>
                                             <label class="form-label">Email</label>
                                             <form:input type="email" 
                                             class="form-control ${not empty errorEmail ? 'is-invalid' : ''}" path="email"/>
@@ -66,9 +74,6 @@
                                     </div>
                                     <div class="col-12 col-md-6 mx-auto">
                                         <div class="mb-3">
-                                            <c:set var="errorPassword">
-                                                <form:errors path="password" cssClass="invalid-feedback"/>
-                                            </c:set>
                                             <label class="form-label">Password</label>
                                             <form:input type="password" 
                                             class="form-control ${not empty errorPassword ? 'is-invalid' : ''}" path="password"/>
@@ -83,9 +88,6 @@
                                     </div>
                                     <div class="col-12 col-md-6 mx-auto">
                                         <div class="mb-3">
-                                            <c:set var="errorFullName">
-                                                <form:errors path="fullName" cssClass="invalid-feedback"/>
-                                            </c:set>
                                             <label class="form-label">Full Name</label>
                                             <form:input type="text" 
                                             class="form-control ${not empty errorFullName ? 'is-invalid' : ''}" path="fullName"/>
