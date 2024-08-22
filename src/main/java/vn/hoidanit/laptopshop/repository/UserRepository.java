@@ -11,7 +11,7 @@ import vn.hoidanit.laptopshop.domain.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // Spring <-> INSERT INTO USER VALUES(...)
-    User save(User hoidanit);
+    User save(User user);
 
     List<User> findByEmail(String email);
 

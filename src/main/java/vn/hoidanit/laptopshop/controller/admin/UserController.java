@@ -81,7 +81,7 @@ public class UserController {
     }
 
     // View Page Table User
-    @RequestMapping("/admin/user")
+    @GetMapping("/admin/user")
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("users", users);
@@ -89,7 +89,7 @@ public class UserController {
     }
 
     // View Page Detail User
-    @RequestMapping("/admin/user/{id}")
+    @GetMapping("/admin/user/{id}")
     public String getUserDetailPage(Model model, @PathVariable long id) {
         User user = this.userService.getUserById(id);
         model.addAttribute("user", user);
@@ -97,7 +97,7 @@ public class UserController {
     }
 
     // Get User By Id Fill to Input
-    @RequestMapping("/admin/user/update/{id}")
+    @GetMapping("/admin/user/update/{id}")
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("newUser", currentUser);
