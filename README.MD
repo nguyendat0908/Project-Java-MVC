@@ -1,9 +1,9 @@
 # 1: Tổng kết về mô hình MVC
 
 - Các thành phần:
-**MODEL:** code tại folder domain -> quản lý đối tượng, tác nhân tác động vào hệ thống (tables lưu trong DB)
-**VIEW:** là các file html, jsp,... tạo giao diện cho người dùng thấy
-**CONTROLLER:** Điều hướng hoạt động
+  - **MODEL:** code tại folder domain -> quản lý đối tượng, tác nhân tác động vào hệ thống (tables lưu trong DB)
+  - **VIEW:** là các file html, jsp,... tạo giao diện cho người dùng thấy
+  - **CONTROLLER:** Điều hướng hoạt động
 
 # 2: DTO Design Pattern DTO (Data transfer object) 
 - Là cách chúng ta biến đổi object này sang object khác. 
