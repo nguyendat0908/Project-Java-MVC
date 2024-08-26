@@ -1,4 +1,4 @@
-#1: Tổng kết về mô hình MVC
+# 1: Tổng kết về mô hình MVC
 
 - Các thành phần:
 **MODEL:** code tại folder domain -> quản lý đối tượng, tác nhân tác động vào hệ thống (tables lưu trong DB)
