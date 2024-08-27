@@ -57,12 +57,6 @@ public class UserController {
     public String createUserPage(Model model, @ModelAttribute("newUser") @Valid User user, BindingResult newUserBindingResult,
             @RequestParam("uploadFile") MultipartFile file) {
 
-        // Get name error
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(error.getField() + " - " + error.getDefaultMessage());
-        }
-
         // If have error
         if (newUserBindingResult.hasErrors()) {
             return "/admin/user/create";
