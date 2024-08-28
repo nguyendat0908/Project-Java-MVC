@@ -2,10 +2,8 @@ package vn.hoidanit.laptopshop.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,21 +20,22 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    // Ghì đè lại method mặc định của lớp UserDetailsService mặc định là InMemoryUserDetailsManager
+    // Ghì đè lại method mặc định của lớp UserDetailsService mặc định là
+    // InMemoryUserDetailsManager
     @Bean
     public UserDetailsService userDetailsService(UserService userService) {
         return new CustomUserDetailsService(userService);
     }
 
+    // Method kết hợp PasswordEncoder với CustomUserDetailService
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http,
+    public DaoAuthenticationProvider authProvider(
             PasswordEncoder passwordEncoder,
-            UserDetailsService userDetailsService) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http
-                .getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder);
-        return authenticationManagerBuilder.build();
+            UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        authProvider.setHideUserNotFoundExceptions(false);
+        return authProvider;
     }
 }
