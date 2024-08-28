@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public List<User> getAllUsersByEmail(String email){
-        return this.userRepository.findByEmail(email);
+        return this.userRepository.findOneByEmail(email);
     }
 
     public User getUserById(long id){
@@ -63,6 +63,11 @@ public class UserService {
     // Check email exist
     public boolean checkEmailExist(String email){
         return this.userRepository.existsByEmail(email);
+    }
+
+    // Get user by email
+    public User getUserByEmail(String email){
+        return this.userRepository.findByEmail(email);
     }
 
 }

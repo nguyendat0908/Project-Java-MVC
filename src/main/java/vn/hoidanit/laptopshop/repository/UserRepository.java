@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Spring <-> INSERT INTO USER VALUES(...)
     User save(User user);
 
-    List<User> findByEmail(String email);
+    List<User> findOneByEmail(String email);
 
     List<User> findAll();
 
@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteById(long id);
 
     boolean existsByEmail(String email);
+
+    User findByEmail(String email);
+
 }
