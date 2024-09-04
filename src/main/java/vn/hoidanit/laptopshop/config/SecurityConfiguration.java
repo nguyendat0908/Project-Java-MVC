@@ -77,13 +77,15 @@ public class SecurityConfiguration {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
 
+                // Config session
                 .sessionManagement((sessionManagement) -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/logout?expired")
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false))
-                        
-                .logout(logout->logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)    // Luôn tạo session mới
+                        .invalidSessionUrl("/logout?expired")       // Nếu session hết hạn thì tự động logout
+                        .maximumSessions(1)     // Tại một thời điểm có bao nhiêu tài khoản đăng nhập
+                        .maxSessionsPreventsLogin(false))       // Khi 2 người đăng nhập cùng một tài khoản, người 2 đăng nhập sẽ đẩy người trước ra
+
+                // Mỗi lần logout xóa Cookies và báo server Session hết hạn
+                .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
 
                 .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
                 .formLogin(formLogin -> formLogin
