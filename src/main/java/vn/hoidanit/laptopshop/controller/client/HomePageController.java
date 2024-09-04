@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.validation.Valid;
 
 
+
 @Controller
 public class HomePageController {
 
@@ -71,6 +72,10 @@ public class HomePageController {
 
         return "client/auth/login";
     }
-    
+
+    @GetMapping("/access-deny")
+    public String getDenyPage(Model model) {
+        return "client/auth/deny";
+    }
     
 }

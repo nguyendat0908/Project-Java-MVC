@@ -28,8 +28,10 @@
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            DatLeo
+            <div class="small">Logged in as:
+                <!--In ra thông tin người dùng khi đăng nhập thành công-->
+                <c:out value="${pageContext.request.userPrincipal.name}"/>
+            </div>
         </div>
     </nav>
 </div>
