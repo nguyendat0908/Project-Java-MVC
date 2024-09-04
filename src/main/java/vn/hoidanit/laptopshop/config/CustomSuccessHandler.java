@@ -26,6 +26,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         // Admin chuyển hướng đến trang admin sau khi login thành công
         roleTargetUrlMap.put("ROLE_ADMIN", "/admin");
 
+        // Kiểm tra quyền, so sánh
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
             String authorityName = grantedAuthority.getAuthority();
@@ -37,6 +38,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         throw new IllegalStateException();
     }
 
+    // Dọn dẹp session tăng hiệu năng
     protected void clearAuthenticationAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
