@@ -20,7 +20,7 @@ public class Cart {
     private long id;
 
     @Min(value = 0)
-    private double sum;
+    private int sum;
 
     // Cart one -> to one User
     @OneToOne()
@@ -39,11 +39,11 @@ public class Cart {
         this.id = id;
     }
 
-    public double getSum() {
+    public int getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(int sum) {
         this.sum = sum;
     }
 
