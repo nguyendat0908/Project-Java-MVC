@@ -6,13 +6,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import vn.hoidanit.laptopshop.domain.Product;
-import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UploadService;
 
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ProductController {
@@ -38,7 +35,7 @@ public class ProductController {
     @GetMapping("/admin/product/create")
     public String getCreateProductPage(Model model) {
         model.addAttribute("newProduct", new Product());
-        return "/admin/product/create";
+        return "admin/product/create";
     }
 
     // Render Data Product
@@ -48,7 +45,7 @@ public class ProductController {
 
         // If have error
         if (newProductBindingResult.hasErrors()) {
-            return "/admin/product/create";
+            return "admin/product/create";
         }
 
         String img = this.uploadService.handleSaveUploadFile(file, "product");
@@ -72,7 +69,7 @@ public class ProductController {
     public String getProductDetailPage(Model model, @PathVariable long id) {
         Product product = this.productService.getProductById(id).get();
         model.addAttribute("product", product);
-        return "/admin/product/detailProduct";
+        return "admin/product/detailProduct";
     }
 
     // Get Product By Id Fill to Input
@@ -120,7 +117,7 @@ public class ProductController {
         Product product = this.productService.getProductById(id).get();
         model.addAttribute("id", id);
         model.addAttribute("newProduct", new Product());
-        return "/admin/product/delete";
+        return "admin/product/delete";
     }
 
     @PostMapping("/admin/product/delete")

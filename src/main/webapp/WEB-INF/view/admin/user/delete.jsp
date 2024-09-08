@@ -42,7 +42,7 @@
                                     <h4>Delete the user with ID = ${id}</h4>
                                 </div>
                                 <hr />
-                                <div class="alert alert-danger">
+                                <div class="alert alert-success mt-5">
                                     Are you sure to delete this user ?
                                 </div>
                                 <form:form method="post" modelAttribute="newUser" action="/admin/user/delete">

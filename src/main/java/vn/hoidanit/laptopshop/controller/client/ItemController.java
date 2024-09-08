@@ -33,7 +33,7 @@ public class ItemController {
         Product pr = this.productService.getProductById(id).get();
         model.addAttribute("product", pr);
         model.addAttribute("id", id);
-        return "client/product/detail";
+        return "client/product/detailProduct";
     }
 
     @PostMapping("/add-product-to-cart/{id}")

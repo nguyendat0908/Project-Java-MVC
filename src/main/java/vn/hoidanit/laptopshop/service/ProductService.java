@@ -30,7 +30,7 @@ public class ProductService {
     private final OrderDetailRepository orderDetailRepository;
 
     public ProductService(ProductRepository productRepository, CartRepository cartRepository,
-            CartDetailRepository cartDetailRepository, UserService userService, 
+            CartDetailRepository cartDetailRepository, UserService userService,
             OrderRepository orderRepository, OrderDetailRepository orderDetailRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
@@ -107,11 +107,11 @@ public class ProductService {
         }
     }
 
-    public Cart fetchByUser(User user){
+    public Cart fetchByUser(User user) {
         return this.cartRepository.findByUser(user);
     }
 
-    public void handleRemoveCartDetail(long cartDetailId, HttpSession session){
+    public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
 
         // Tìm cartDetail dựa trên Id
         Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetailId);
@@ -128,13 +128,14 @@ public class ProductService {
                 int s = currentCart.getSum() - 1;
                 currentCart.setSum(s);
                 session.setAttribute("sum", s);
-            }else{
+            } else {
                 // Xóa cart
                 this.cartRepository.deleteById(currentCart.getId());
                 session.setAttribute("sum", 0);
             }
         }
     }
+
     public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
         for (CartDetail cartDetail : cartDetails) {
             Optional<CartDetail> cdOptional = this.cartDetailRepository.findById(cartDetail.getId());
@@ -146,31 +147,40 @@ public class ProductService {
         }
     }
 
-    public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress, String receiverPhone){
-        // Tạo order
-        Order order = new Order();
-        order.setUser(user);
-        order.setReceiverName(receiverName);
-        order.setReceiverAddress(receiverAddress);
-        order.setReceiverPhone(receiverPhone);
+    public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress,
+            String receiverPhone) {
 
-        order = this.orderRepository.save(order);
-
-        // Tạo orderDetail
-        
         // Bước 1: Lấy ra cart bởi user
         Cart cart = this.cartRepository.findByUser(user);
         if (cart != null) {
             List<CartDetail> cartDetails = cart.getCartDetails();
 
             if (cartDetails != null) {
+                // Tạo order
+                Order order = new Order();
+                order.setUser(user);
+                order.setReceiverName(receiverName);
+                order.setReceiverAddress(receiverAddress);
+                order.setReceiverPhone(receiverPhone);
+                order.setStatus("PENDING");
+
+                // Tính tổng tiền
+                double sum = 0;
+                for (CartDetail cartDetail : cartDetails) {
+                    sum += cartDetail.getPrice();
+                }
+                order.setTotalPrice(sum);
+
+                order = this.orderRepository.save(order);
+
+                // Tạo orderDetail
                 for (CartDetail cartDetail : cartDetails) {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setOrder(order);
                     orderDetail.setProduct(cartDetail.getProduct());
                     orderDetail.setPrice(cartDetail.getPrice());
                     orderDetail.setQuantity(cartDetail.getQuantity());
-                    
+
                     this.orderDetailRepository.save(orderDetail);
                 }
 
