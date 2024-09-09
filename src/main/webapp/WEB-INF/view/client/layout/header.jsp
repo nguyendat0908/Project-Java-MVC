@@ -14,7 +14,7 @@
                     <div class="collapse navbar-collapse bg-white justify-content-between mx-5" id="navbarCollapse">
                         <div class="navbar-nav">
                             <a href="/" class="nav-item nav-link active">Trang Chủ</a>
-                            <a href="/products" class="nav-item nav-link">Sản Phẩm</a>
+                            <a href="/" class="nav-item nav-link">Sản Phẩm</a>
 
                         </div>
                         <div class="d-flex m-3 me-0">
@@ -41,7 +41,7 @@
                                         </div>
                                     </li>
                                     <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
-                                    <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                                    <li><a class="dropdown-item" href="/order-history">Lịch sử mua hàng</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
