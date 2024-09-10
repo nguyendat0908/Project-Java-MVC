@@ -27,4 +27,13 @@ Tuy nhiên, trước khi ném data về client, chúng ta “nên dấu đi/ché
 - **Bước 3:** Nạp user vào Context
 ![Preview](https://github.com/nguyendat0908/Project-Java-MVC/blob/d45af1918a4e919cf3501a726a7d604a884f4266/src/main/webapp/resources/images/Screenshot%202024-08-28%20004333.png)
 
+# 4: Tại sao phải phân trang dữ liệu (Pagination) ?
+- Vấn đề tồn đọng: lấy tất cả dữ liệu (Paginate)
+- Nếu dữ liệu nhỏ (vài chục, vài trăm rows), không vấn đề gì? Tuy nhiên, vài ngàn, vài trăm ngàn, vài triệu ... sẽ là vấn đề
+- Tại sao? Lấy càng nhiều data, càng tốn nhiều băng thông (tốc dộ truyền tải của mạng internet) và thời gian chờ đợi càng lâu, làm giảm trải nghiệm của người dùng.
+- **Giari pháp đề ra:**
+- Chỉ lấy số lượng data vừa đủ. Câu chuyện tương tự:
+- Muốn download file nhanh -> tải file nhẹ thôi (file càng nặng, tải càng lâu, thời gian chờ đợi càng lớn)
+- Muốn chờ đợi ít -> lấy ít data thôi nhé (và chỉ lấy data cần thiết, không dư thừa)
+
 
