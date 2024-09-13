@@ -2,7 +2,11 @@ package vn.hoidanit.laptopshop.controller.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
+import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.ProductService;
@@ -45,7 +50,12 @@ public class ItemController {
 
         this.productService.handleAddProductToCart(email, productId, session, 1);
 
-        return "redirect:/";
+        // Quay trở lại trang gốc
+        String referer = request.getHeader("Referer");
+        if (referer == null || referer.isEmpty()) {
+            referer = "/";
+        }
+        return "redirect:" + referer;
     }
 
     @GetMapping("/cart")
@@ -128,14 +138,14 @@ public class ItemController {
     }
 
     @GetMapping("/thanks")
-    public String getThankYouPage(Model model){
+    public String getThankYouPage(Model model) {
 
         return "client/cart/thanks";
     }
 
     @PostMapping("/add-product-from-view-detail")
-    public String handleAddProductFromViewDetail(@RequestParam("id") long id, 
-    @RequestParam("quantity") long quantity, HttpServletRequest request){
+    public String handleAddProductFromViewDetail(@RequestParam("id") long id,
+            @RequestParam("quantity") long quantity, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         String email = (String) session.getAttribute("email");
@@ -143,4 +153,32 @@ public class ItemController {
 
         return "redirect:/product/" + id;
     }
+
+    // Get product and all product
+    @GetMapping("/products")
+    public String getProductPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                // Convert from String to int
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        // Pagination
+        Pageable pageable = PageRequest.of(page - 1, 6);
+        Page<Product> prs = this.productService.getAllProducts(pageable);
+        List<Product> listProducts = prs.getContent();
+
+        // Get current page
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", prs.getTotalPages());
+        model.addAttribute("products", listProducts);
+
+        return "client/product/show";
+    }
+
 }
