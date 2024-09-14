@@ -1,6 +1,7 @@
 package vn.hoidanit.laptopshop.controller.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -160,8 +161,8 @@ public class ItemController {
     @RequestParam("page") Optional<String> pageOptional,
     @RequestParam("name") Optional<String> nameOptional, 
     @RequestParam("factory") Optional<String> factoryOptional,
-    @RequestParam("min-price") Optional<String> minOptional,
-    @RequestParam("max-price") Optional<String> maxOptional,
+    @RequestParam("target") Optional<String> targetOptional,
+    @RequestParam("sort") Optional<String> sortOptional,
     @RequestParam("price") Optional<String> priceOptional
     ) {
 
@@ -178,8 +179,8 @@ public class ItemController {
         // Pagination
         Pageable pageable = PageRequest.of(page - 1, 60);
 
-        // String name = nameOptional.isPresent() ? nameOptional.get() : "";
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, name);
+        String name = nameOptional.isPresent() ? nameOptional.get() : "";
+        Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, name);
 
         // Case 1: Lọc với giá tối thiểu
         // double min = minOptional.isPresent() ? Double.parseDouble(minOptional.get()) : 0;
@@ -192,6 +193,18 @@ public class ItemController {
         // Case 3: Lọc với điều kiện đúng với một hãng sản xuất
         // String factory = factoryOptional.isPresent() ? factoryOptional.get() : "";
         // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, factory);
+
+        // Case 4: Lọc với điều kiện nhiều hãng sản xuất
+        // List<String> factory = Arrays.asList(factoryOptional.get().split(","));
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, factory);
+
+        // Case 5: Lọc với điều kiện giá trong khoảng
+        // String price = priceOptional.isPresent() ? priceOptional.get() : "";
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, price);
+
+        // Case 6: Lọc với nhiều điều kiện giá trong khoảng
+        // List<String> price = Arrays.asList(priceOptional.get().split(","));
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, price);
 
         List<Product> listProducts = prs.getContent();
 

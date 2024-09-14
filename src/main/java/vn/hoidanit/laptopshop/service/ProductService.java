@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
@@ -47,29 +48,91 @@ public class ProductService {
         return this.productRepository.save(product);
     }
 
-
     public Page<Product> getAllProducts(Pageable pageable) {
         return this.productRepository.findAll(pageable);
     }
 
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, String name) {
-    //     return this.productRepository.findAll(ProductSpecs.nameLike(name),pageable);
-    // }
+    public Page<Product> getAllProductsWithSpec(Pageable pageable, String name) {
+    return this.productRepository.findAll(ProductSpecs.nameLike(name),pageable);
+    }
 
     // Case 1: Lọc giá tối thiểu
     // public Page<Product> getAllProductsWithSpec(Pageable pageable, double min) {
-    //     return this.productRepository.findAll(ProductSpecs.minPrice(min),pageable);
+    // return this.productRepository.findAll(ProductSpecs.minPrice(min),pageable);
     // }
 
     // Case 2: Lọc giá tối đa
     // public Page<Product> getAllProductsWithSpec(Pageable pageable, double max) {
-    //     return this.productRepository.findAll(ProductSpecs.maxPrice(max),pageable);
+    // return this.productRepository.findAll(ProductSpecs.maxPrice(max),pageable);
     // }
 
     // Case 3: Lọc lấy ra sản phẩm với điều kiện trùng một hãng sản xuất
-    public Page<Product> getAllProductsWithSpec(Pageable pageable, String factory) {
-        return this.productRepository.findAll(ProductSpecs.factoryQuery(factory), pageable);
-    }
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, String factory) {
+    //     return this.productRepository.findAll(ProductSpecs.matchFactory(factory), pageable);
+    // }
+
+    // Case 4: Lọc lấy ra sản phẩm với nhiều điều kiện của hãng sản xuất
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, List<String> factory) {
+    //     return this.productRepository.findAll(ProductSpecs.matchListFactory(factory), pageable);
+    // }
+
+    // Case 5: Lọc lấy ra sản phẩm với điều kiện giá trong khoảng
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, String price) {
+    //     if (price.equals("10-toi-15-trieu")) {
+    //         double min = 10000000;
+    //         double max = 15000000;
+    //         return this.productRepository.findAll(ProductSpecs.matchPrice(min, max), pageable);
+    //     } else if(price.equals("15-toi-30-trieu")) {
+    //         double min = 15000000;
+    //         double max = 30000000;
+    //         return this.productRepository.findAll(ProductSpecs.matchPrice(min, max), pageable);
+    //     }else{
+    //         return this.productRepository.findAll(pageable);
+    //     }
+    // }
+
+    // Case 6: Lọc với nhiều điều kiện trong tầm giá
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, List<String> price){
+    //     // Sử dụng disjunction() để tạo ra điều kiện OR - (combinedSpec như là một cái mảng)
+    //     Specification<Product> combinedSpec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
+    //     int count = 0;
+    //     for (String p : price) {
+    //         double min = 0;
+    //         double max = 0;
+
+    //         switch (p) {
+    //             case "10-toi-15-trieu":
+    //                 min = 10000000;
+    //                 max = 15000000;
+    //                 count++;
+    //                 break;
+    //             case "15-toi-20-trieu":
+    //                 min = 15000000;
+    //                 max = 20000000;
+    //                 count++;
+    //                 break;
+    //             case "20-toi-30-trieu":
+    //                 min = 20000000;
+    //                 max = 30000000;
+    //                 count++;
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //         if (min != 0 && max != 0) {
+    //             Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(min, max);
+    //             combinedSpec = combinedSpec.or(rangeSpec);
+    //         }
+    //     }
+
+    //     // Kiểm tra có sự thay đổi nào được thêm vào combinedSpec không?
+    //     if (count == 0) {
+    //         return this.productRepository.findAll(pageable);
+    //     }
+
+    //     return this.productRepository.findAll(combinedSpec, pageable);
+        
+    // }
 
     public Optional<Product> getProductById(long id) {
         return this.productRepository.findById(id);
