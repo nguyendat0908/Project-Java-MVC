@@ -156,7 +156,8 @@ public class ItemController {
 
     // Get product and all product
     @GetMapping("/products")
-    public String getProductPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+    public String getProductPage(Model model, @RequestParam("page") Optional<String> pageOptional,
+    @RequestParam("name") Optional<String> nameOptional) {
 
         int page = 1;
         try {
@@ -168,15 +169,18 @@ public class ItemController {
             // TODO: handle exception
         }
 
+        String name = nameOptional.get();
+
         // Pagination
         Pageable pageable = PageRequest.of(page - 1, 6);
-        Page<Product> prs = this.productService.getAllProducts(pageable);
+        Page<Product> prs = this.productService.getAllProducts(pageable, name);
         List<Product> listProducts = prs.getContent();
 
         // Get current page
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", prs.getTotalPages());
         model.addAttribute("products", listProducts);
+
 
         return "client/product/show";
     }
