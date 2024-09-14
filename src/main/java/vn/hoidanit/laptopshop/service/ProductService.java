@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
@@ -14,13 +13,13 @@ import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
-import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
 import vn.hoidanit.laptopshop.repository.OrderDetailRepository;
 import vn.hoidanit.laptopshop.repository.OrderRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
+import vn.hoidanit.laptopshop.service.specification.ProductSpecs;
 
 @Service
 public class ProductService {
@@ -48,18 +47,28 @@ public class ProductService {
         return this.productRepository.save(product);
     }
 
-    // Viết truy vấn bằng Specification
-    /*
-        Root: đại diện table muốn truy vấn, được dùng để truy cập entity và fields của nó
-        CriteriaQuery: tạo ra cấu trúc tổng quan của query, dùng để modify the select, join,group by, order by, etc. (ít dùng)
-        CriteriaBuilder: sử dụng predicates, để build ra điều kiện của câu query
-     */
-    public Specification<Product> nameLike(String name){
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Product_.name), "%"+name+"%");
+
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return this.productRepository.findAll(pageable);
     }
 
-    public Page<Product> getAllProducts(Pageable pageable, String name) {
-        return this.productRepository.findAll(this.nameLike(name),pageable);
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, String name) {
+    //     return this.productRepository.findAll(ProductSpecs.nameLike(name),pageable);
+    // }
+
+    // Case 1: Lọc giá tối thiểu
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, double min) {
+    //     return this.productRepository.findAll(ProductSpecs.minPrice(min),pageable);
+    // }
+
+    // Case 2: Lọc giá tối đa
+    // public Page<Product> getAllProductsWithSpec(Pageable pageable, double max) {
+    //     return this.productRepository.findAll(ProductSpecs.maxPrice(max),pageable);
+    // }
+
+    // Case 3: Lọc lấy ra sản phẩm với điều kiện trùng một hãng sản xuất
+    public Page<Product> getAllProductsWithSpec(Pageable pageable, String factory) {
+        return this.productRepository.findAll(ProductSpecs.factoryQuery(factory), pageable);
     }
 
     public Optional<Product> getProductById(long id) {

@@ -156,8 +156,14 @@ public class ItemController {
 
     // Get product and all product
     @GetMapping("/products")
-    public String getProductPage(Model model, @RequestParam("page") Optional<String> pageOptional,
-    @RequestParam("name") Optional<String> nameOptional) {
+    public String getProductPage(Model model, 
+    @RequestParam("page") Optional<String> pageOptional,
+    @RequestParam("name") Optional<String> nameOptional, 
+    @RequestParam("factory") Optional<String> factoryOptional,
+    @RequestParam("min-price") Optional<String> minOptional,
+    @RequestParam("max-price") Optional<String> maxOptional,
+    @RequestParam("price") Optional<String> priceOptional
+    ) {
 
         int page = 1;
         try {
@@ -169,11 +175,24 @@ public class ItemController {
             // TODO: handle exception
         }
 
-        String name = nameOptional.get();
-
         // Pagination
-        Pageable pageable = PageRequest.of(page - 1, 6);
-        Page<Product> prs = this.productService.getAllProducts(pageable, name);
+        Pageable pageable = PageRequest.of(page - 1, 60);
+
+        // String name = nameOptional.isPresent() ? nameOptional.get() : "";
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, name);
+
+        // Case 1: Lọc với giá tối thiểu
+        // double min = minOptional.isPresent() ? Double.parseDouble(minOptional.get()) : 0;
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, min);
+
+        // Case 2: Lọc với giá tối đa
+        // double max = maxOptional.isPresent() ? Double.parseDouble(maxOptional.get()) : 0;
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, max);
+
+        // Case 3: Lọc với điều kiện đúng với một hãng sản xuất
+        // String factory = factoryOptional.isPresent() ? factoryOptional.get() : "";
+        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, factory);
+
         List<Product> listProducts = prs.getContent();
 
         // Get current page
