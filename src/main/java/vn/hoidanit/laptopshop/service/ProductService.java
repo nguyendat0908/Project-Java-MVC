@@ -15,6 +15,7 @@ import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
 import vn.hoidanit.laptopshop.repository.OrderDetailRepository;
@@ -52,87 +53,73 @@ public class ProductService {
         return this.productRepository.findAll(pageable);
     }
 
-    public Page<Product> getAllProductsWithSpec(Pageable pageable, String name) {
-    return this.productRepository.findAll(ProductSpecs.nameLike(name),pageable);
+    public Page<Product> getAllProductsWithSpec(Pageable pageable, ProductCriteriaDTO productCriteriaDTO) {
+
+        // Không truyền lên URL thì mặc định lấy hết sản phẩm
+        if (productCriteriaDTO.getTarget() == null
+                && productCriteriaDTO.getFactory() == null
+                && productCriteriaDTO.getPrice() == null) {
+            return this.getAllProducts(pageable);
+        }
+
+        // Tạo đối tượng rỗng không có bất kỳ đối tượng nào
+        Specification<Product> combinedSpec = Specification.where(null);
+
+        // Filter với mục đích sử dụng
+        if (productCriteriaDTO.getTarget() != null && productCriteriaDTO.getTarget().isPresent()) {
+            Specification<Product> currentSpec = ProductSpecs.matchListTarget(productCriteriaDTO.getTarget().get());
+            combinedSpec = combinedSpec.and(currentSpec);
+        }
+        // Filter với hãng sản xuất
+        if (productCriteriaDTO.getFactory() != null && productCriteriaDTO.getFactory().isPresent()) {
+            Specification<Product> currentSpec = ProductSpecs.matchListFactory(productCriteriaDTO.getFactory().get());
+            combinedSpec = combinedSpec.and(currentSpec);
+        }
+        // Filter với giá cả
+        if (productCriteriaDTO.getPrice() != null && productCriteriaDTO.getPrice().isPresent()) {
+            Specification<Product> currentSpec = this.buildPriceSpecification(productCriteriaDTO.getFactory().get());
+            combinedSpec = combinedSpec.and(currentSpec);
+        }
+
+        // Nạp tất cả điều kiện vào combinedSpec để truy vấn một lần
+
+        return this.productRepository.findAll(combinedSpec, pageable);
     }
 
-    // Case 1: Lọc giá tối thiểu
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, double min) {
-    // return this.productRepository.findAll(ProductSpecs.minPrice(min),pageable);
-    // }
+    public Specification<Product> buildPriceSpecification(List<String> price) {
+        // Tạo đối tượng rỗng không có bất kỳ đối tượng nào
+        Specification<Product> combinedSpec = Specification.where(null);
+        for (String p : price) {
+            double min = 0;
+            double max = 0;
 
-    // Case 2: Lọc giá tối đa
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, double max) {
-    // return this.productRepository.findAll(ProductSpecs.maxPrice(max),pageable);
-    // }
-
-    // Case 3: Lọc lấy ra sản phẩm với điều kiện trùng một hãng sản xuất
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, String factory) {
-    //     return this.productRepository.findAll(ProductSpecs.matchFactory(factory), pageable);
-    // }
-
-    // Case 4: Lọc lấy ra sản phẩm với nhiều điều kiện của hãng sản xuất
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, List<String> factory) {
-    //     return this.productRepository.findAll(ProductSpecs.matchListFactory(factory), pageable);
-    // }
-
-    // Case 5: Lọc lấy ra sản phẩm với điều kiện giá trong khoảng
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, String price) {
-    //     if (price.equals("10-toi-15-trieu")) {
-    //         double min = 10000000;
-    //         double max = 15000000;
-    //         return this.productRepository.findAll(ProductSpecs.matchPrice(min, max), pageable);
-    //     } else if(price.equals("15-toi-30-trieu")) {
-    //         double min = 15000000;
-    //         double max = 30000000;
-    //         return this.productRepository.findAll(ProductSpecs.matchPrice(min, max), pageable);
-    //     }else{
-    //         return this.productRepository.findAll(pageable);
-    //     }
-    // }
-
-    // Case 6: Lọc với nhiều điều kiện trong tầm giá
-    // public Page<Product> getAllProductsWithSpec(Pageable pageable, List<String> price){
-    //     // Sử dụng disjunction() để tạo ra điều kiện OR - (combinedSpec như là một cái mảng)
-    //     Specification<Product> combinedSpec = (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
-    //     int count = 0;
-    //     for (String p : price) {
-    //         double min = 0;
-    //         double max = 0;
-
-    //         switch (p) {
-    //             case "10-toi-15-trieu":
-    //                 min = 10000000;
-    //                 max = 15000000;
-    //                 count++;
-    //                 break;
-    //             case "15-toi-20-trieu":
-    //                 min = 15000000;
-    //                 max = 20000000;
-    //                 count++;
-    //                 break;
-    //             case "20-toi-30-trieu":
-    //                 min = 20000000;
-    //                 max = 30000000;
-    //                 count++;
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //         if (min != 0 && max != 0) {
-    //             Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(min, max);
-    //             combinedSpec = combinedSpec.or(rangeSpec);
-    //         }
-    //     }
-
-    //     // Kiểm tra có sự thay đổi nào được thêm vào combinedSpec không?
-    //     if (count == 0) {
-    //         return this.productRepository.findAll(pageable);
-    //     }
-
-    //     return this.productRepository.findAll(combinedSpec, pageable);
-        
-    // }
+            switch (p) {
+                case "duoi-10-trieu":
+                    min = 0;
+                    max = 10000000;
+                    break;
+                case "10-15-trieu":
+                    min = 10000000;
+                    max = 15000000;
+                    break;
+                case "15-20-trieu":
+                    min = 15000000;
+                    max = 20000000;
+                    break;
+                case "tren-20-trieu":
+                    min = 20000000;
+                    max = 20000000;
+                    break;
+                default:
+                    break;
+            }
+            if (min != 0 && max != 0) {
+                Specification<Product> rangeSpec = ProductSpecs.matchMultiplePrice(min, max);
+                combinedSpec = combinedSpec.or(rangeSpec);
+            }
+        }
+        return combinedSpec;
+    }
 
     public Optional<Product> getProductById(long id) {
         return this.productRepository.findById(id);

@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,9 @@ import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.domain.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.service.ProductService;
 
 @Controller
@@ -157,61 +160,45 @@ public class ItemController {
 
     // Get product and all product
     @GetMapping("/products")
-    public String getProductPage(Model model, 
-    @RequestParam("page") Optional<String> pageOptional,
-    @RequestParam("name") Optional<String> nameOptional, 
-    @RequestParam("factory") Optional<String> factoryOptional,
-    @RequestParam("target") Optional<String> targetOptional,
-    @RequestParam("sort") Optional<String> sortOptional,
-    @RequestParam("price") Optional<String> priceOptional
-    ) {
+    public String getProductPage(Model model, ProductCriteriaDTO productCriteriaDTO, HttpServletRequest request) {
 
         int page = 1;
         try {
-            if (pageOptional.isPresent()) {
+            if (productCriteriaDTO.getPage().isPresent()) {
                 // Convert from String to int
-                page = Integer.parseInt(pageOptional.get());
+                page = Integer.parseInt(productCriteriaDTO.getPage().get());
             }
         } catch (Exception e) {
             // TODO: handle exception
         }
 
-        // Pagination
-        Pageable pageable = PageRequest.of(page - 1, 60);
+        // Check sort
+        Pageable pageable =  PageRequest.of(page - 1, 9);
+        if (productCriteriaDTO.getSort() != null && productCriteriaDTO.getSort().isPresent()) {
+            String sort = productCriteriaDTO.getSort().get();
+            if (sort.equals("gia-tang-dan")) {
+                pageable = PageRequest.of(page - 1, 9, Sort.by(Product_.PRICE).ascending());
+            } else if(sort.equals("gia-giam-dan")) {
+                pageable = PageRequest.of(page - 1, 9, Sort.by(Product_.PRICE).descending());
+            }
+        }
 
-        String name = nameOptional.isPresent() ? nameOptional.get() : "";
-        Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, name);
+        Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, productCriteriaDTO);
 
-        // Case 1: Lọc với giá tối thiểu
-        // double min = minOptional.isPresent() ? Double.parseDouble(minOptional.get()) : 0;
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, min);
+        // Lấy danh sách sản phẩm nếu có thì hiển thị ra còn nếu không có thì trả về mảng rỗng
+        List<Product> listProducts = prs.getContent().size() > 0 ? prs.getContent() : new ArrayList<Product>();
 
-        // Case 2: Lọc với giá tối đa
-        // double max = maxOptional.isPresent() ? Double.parseDouble(maxOptional.get()) : 0;
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, max);
-
-        // Case 3: Lọc với điều kiện đúng với một hãng sản xuất
-        // String factory = factoryOptional.isPresent() ? factoryOptional.get() : "";
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, factory);
-
-        // Case 4: Lọc với điều kiện nhiều hãng sản xuất
-        // List<String> factory = Arrays.asList(factoryOptional.get().split(","));
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, factory);
-
-        // Case 5: Lọc với điều kiện giá trong khoảng
-        // String price = priceOptional.isPresent() ? priceOptional.get() : "";
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, price);
-
-        // Case 6: Lọc với nhiều điều kiện giá trong khoảng
-        // List<String> price = Arrays.asList(priceOptional.get().split(","));
-        // Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, price);
-
-        List<Product> listProducts = prs.getContent();
+        String qs = request.getQueryString();
+        if (qs != null && !qs.isBlank()) {
+            // Remove page
+            qs = qs.replace("page=" + page, "");
+        }
 
         // Get current page
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", prs.getTotalPages());
         model.addAttribute("products", listProducts);
+        model.addAttribute("queryString", qs);
 
 
         return "client/product/show";

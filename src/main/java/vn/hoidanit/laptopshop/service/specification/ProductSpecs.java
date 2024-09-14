@@ -43,6 +43,16 @@ public class ProductSpecs {
         return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(Product_.FACTORY)).value(factory);
     }
 
+    // Truy vấn lấy ra sản phẩm có mục đích với một điều kiện
+    public static Specification<Product> matchTarget(String target) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Product_.target), target);
+    }
+
+    // Truy vấn lấy ra sản phẩm với nhiều mục đích
+    public static Specification<Product> matchListTarget(List<String> target){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(Product_.TARGET)).value(target);
+    }
+
     // Truy vấn lấy ra sản phẩm với điều kiện giá trong khoảng
     public static Specification<Product> matchPrice(double min, double max){
         return (root, query, criteriaBuilder) -> criteriaBuilder.and(
