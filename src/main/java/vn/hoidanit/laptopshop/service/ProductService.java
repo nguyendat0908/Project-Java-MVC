@@ -77,7 +77,7 @@ public class ProductService {
         }
         // Filter với giá cả
         if (productCriteriaDTO.getPrice() != null && productCriteriaDTO.getPrice().isPresent()) {
-            Specification<Product> currentSpec = this.buildPriceSpecification(productCriteriaDTO.getFactory().get());
+            Specification<Product> currentSpec = this.buildPriceSpecification(productCriteriaDTO.getPrice().get());
             combinedSpec = combinedSpec.and(currentSpec);
         }
 
@@ -95,7 +95,7 @@ public class ProductService {
 
             switch (p) {
                 case "duoi-10-trieu":
-                    min = 0;
+                    min = 1;
                     max = 10000000;
                     break;
                 case "10-15-trieu":
@@ -108,7 +108,7 @@ public class ProductService {
                     break;
                 case "tren-20-trieu":
                     min = 20000000;
-                    max = 20000000;
+                    max = 200000000;
                     break;
                 default:
                     break;
