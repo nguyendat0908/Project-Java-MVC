@@ -56,7 +56,7 @@
                     <div class="container mt-5">
                         <div class="row">
                             <div class="col-12 mx-auto">
-                                <h4>Update a User</h4>
+                                <h4>Update a Product</h4>
                                 <hr />
                                 <form:form method="post" action="/admin/product/update" modelAttribute="newProduct" class="row" enctype="multipart/form-data">
                                     <c:set var="errorName">

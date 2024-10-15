@@ -21,7 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
-import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.User;
@@ -173,19 +172,20 @@ public class ItemController {
         }
 
         // Check sort
-        Pageable pageable =  PageRequest.of(page - 1, 9);
+        Pageable pageable = PageRequest.of(page - 1, 9);
         if (productCriteriaDTO.getSort() != null && productCriteriaDTO.getSort().isPresent()) {
             String sort = productCriteriaDTO.getSort().get();
             if (sort.equals("gia-tang-dan")) {
                 pageable = PageRequest.of(page - 1, 9, Sort.by(Product_.PRICE).ascending());
-            } else if(sort.equals("gia-giam-dan")) {
+            } else if (sort.equals("gia-giam-dan")) {
                 pageable = PageRequest.of(page - 1, 9, Sort.by(Product_.PRICE).descending());
             }
         }
 
         Page<Product> prs = this.productService.getAllProductsWithSpec(pageable, productCriteriaDTO);
 
-        // Lấy danh sách sản phẩm nếu có thì hiển thị ra còn nếu không có thì trả về mảng rỗng
+        // Lấy danh sách sản phẩm nếu có thì hiển thị ra còn nếu không có thì trả về
+        // mảng rỗng
         List<Product> listProducts = prs.getContent().size() > 0 ? prs.getContent() : new ArrayList<Product>();
 
         String qs = request.getQueryString();
@@ -199,7 +199,6 @@ public class ItemController {
         model.addAttribute("totalPages", prs.getTotalPages());
         model.addAttribute("products", listProducts);
         model.addAttribute("queryString", qs);
-
 
         return "client/product/show";
     }

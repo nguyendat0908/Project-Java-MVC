@@ -18,7 +18,6 @@ import vn.hoidanit.laptopshop.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,14 +39,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping("/")
-    public String getHomePage(Model model) {
-        List<User> users = this.userService.getAllUsersByEmail("abc");
-        model.addAttribute("dat", "test");
-        model.addAttribute("datdeptrai", "Dat dep trai nhat trai dat!");
-        return "hello";
-    }
-
     // View Page Create User
     @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
@@ -57,7 +48,8 @@ public class UserController {
 
     // Render Data User
     @PostMapping("/admin/user/create")
-    public String createUserPage(Model model, @ModelAttribute("newUser") @Valid User user, BindingResult newUserBindingResult,
+    public String createUserPage(Model model, @ModelAttribute("newUser") @Valid User user,
+            BindingResult newUserBindingResult,
             @RequestParam("uploadFile") MultipartFile file) {
 
         // If have error

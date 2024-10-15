@@ -42,9 +42,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                 <div class="col-12 mx-auto">
                   <div class="d-flex justify-content-between">
                     <h4>Table products</h4>
-                    <a href="/admin/product/create" class="btn btn-primary"
-                      >Create a product</a
-                    >
+                    <a href="/admin/product/create" class="btn btn-primary">Create a product</a>
                   </div>
                   <hr />
                   <table class="table table-hover table-bordered">
