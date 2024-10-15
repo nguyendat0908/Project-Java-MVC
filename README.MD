@@ -36,4 +36,24 @@ Tuy nhiên, trước khi ném data về client, chúng ta “nên dấu đi/ché
 - Muốn download file nhanh -> tải file nhẹ thôi (file càng nặng, tải càng lâu, thời gian chờ đợi càng lớn)
 - Muốn chờ đợi ít -> lấy ít data thôi nhé (và chỉ lấy data cần thiết, không dư thừa)
 
+# 5: Quy trình code một Website với Spring
+- **Bước 1:** Tạo dự án Spring với Spring Boot
+- Truy cập: https://start.spring.io/
+-> Cần lưu ý về version Java cũng như version của Spring Boot
+- **Bước 2:** Thêm dependency
+- Các thư viện cơ bản:
++ spring-boot-starter-web
++ spring-boot-devtools
+- **Bước 3:** Tiến trình code dự án
+Tổ chức code theo mô hình MVC và các cấu trúc thư mục.
+Cấu hình Spring-security
+- *Bước 3.1:* Làm tính năng CRUD users để có tài khoản đăng nhập hệ thống.
+- Sử dụng Spring-security để hash password
+- Tạo base các tính năng cơ bản của dự án
+- *Bước 3.2:* Cấu hình Spring Session
+- Làm tính năng Login/register cũng như cấu hình Security để truy cập website
+-> Lưu ý: với method post cần csrf token. Nếu bạn không muốn truyền token tại form, có thể disable nó đi
+- **Bước 4:** Xử lý các tính năng trong dự án của bạn
+- Thực hành CRUD
+
 
